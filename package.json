@@ -2,7 +2,7 @@
   "name": "web-btcn01-18127136",
   "author": "18127136 - Nguyen Dang Huynh Long",
   "version": "0.1.0",
-  "homepage": "https://nguyendonghuynhlang26123.github.io/web-btcn01-18127136",
+  "homepage": ".",
   "private": true,
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
