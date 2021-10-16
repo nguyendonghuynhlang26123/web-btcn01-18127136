@@ -2,7 +2,7 @@
 # General information
 Name: Nguyễn Đăng Huỳnh Long \
 Student ID: 18127136 \
-Deployed: [Deployed status workflow](https://github.com/nguyendonghuynhlang26123/web-btcn01-18127136/actions/workflows/workflow.yml/badge.svg)
+Deployed: ![Deployed status workflow](https://github.com/nguyendonghuynhlang26123/web-btcn01-18127136/actions/workflows/workflow.yml/badge.svg)
 # Project information
 - This project is the homework#01 for Course: Advanced Web Application Development 
 - This project is built using [ReactJS](https://reactjs.org/docs/hooks-reference.html) & [Typescript](https://www.typescriptlang.org/) and [Github action](https://github.com/features/actions) to automatically deploy project.
