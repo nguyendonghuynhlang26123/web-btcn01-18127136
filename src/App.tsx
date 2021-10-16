@@ -3,13 +3,19 @@ import './assets/styles/index.css';
 import { SquareType } from './components/Board/type';
 import { Board } from './components/Board';
 
+/**
+ * Check if all elements in the array are equal to each other
+ * @param arr
+ * @returns {boolean}
+ */
 const allEqual = (arr: any[]): boolean => {
   if (arr.length === 0) return false;
   return arr.every((v) => v === arr[0]);
 };
 
 /**
- * Calculate the winner
+ * Calculate the winner by looping through the board (brute-force)
+ * @dev Check winning condition of an element in 4 direction: | (vertical), — (horizontal),  / (diagnonal right) ,  \ (diagonal left)
  * @param board  board state at the moment
  * @param boardWitdth Width of the board
  * @param numToWin Number consecutive 'O' or 'X' to win the game
@@ -19,7 +25,6 @@ const calculateWinner = (board: SquareType[], boardWitdth: number, numToWin: num
   const temp = Array(numToWin).fill(null);
   for (let i = 0; i < board.length; i++) {
     if (!board[i]) continue;
-    console.log('log ~ file: App.tsx ~ line 16 ~ calculateWinner ~ board[i]', board[i], i);
     // Check in Horizontal direction: [i, i+1, i+2, i+3, ...] AND they are on the same row
     const horizontalLine = temp.map((_, offset) => board[i + offset]);
     const rowNumbers = temp.map((_, offset) => Math.floor((i + offset) / boardWitdth));
@@ -40,11 +45,8 @@ const calculateWinner = (board: SquareType[], boardWitdth: number, numToWin: num
   return null;
 };
 
+// Move type
 type MoveHistory = { row: number; col: number } | null;
-
-// const WIDTH = 15;
-// const HEIGHT = 15;
-// const NUM_TO_WIN = 5;
 
 function App() {
   const [moveHistory, setMoveHistory] = React.useState<MoveHistory[]>([null]);
@@ -59,6 +61,10 @@ function App() {
   const [WIDTH, setWidth] = React.useState<number>(5);
   const [NUM_TO_WIN, setNumToWin] = React.useState<number>(5);
 
+  /**
+   * A callback whenever a player click on an square
+   * @param i square index in the boardState
+   */
   const handleClick = (i: number): void => {
     const newMoveHistory = moveHistory.slice(0, stepNumber + 1);
     const history = boardHistory.slice(0, stepNumber + 1);
@@ -79,6 +85,10 @@ function App() {
     setIsXTurn((xTurn) => !xTurn);
   };
 
+  /**
+   * Jump to step number
+   * @param step Targeted step
+   */
   const jumpTo = (step: number): void => {
     setStepNumber(step);
     setIsXTurn(step % 2 === 0);
@@ -92,6 +102,9 @@ function App() {
     }
   };
 
+  /**
+   * Reset the board state to the initial state
+   */
   const resetBoard = () => {
     setMoveHistory([null]);
     setBoardHistory([Array(9).fill(null)]);
@@ -102,6 +115,12 @@ function App() {
     setSortAsc(true);
   };
 
+  /**
+   * A helper function to generate an array of indices with length E.g: [0,1,2,3,4]
+   * @param length Array length
+   * @param isAsc indices order.
+   * @returns return [0, 1, 2, ...] if isAsc == true, else returns [..., 2, 1, 0]
+   */
   const getIndicesArr = (length: number, isAsc: boolean) => {
     const res = Array(moveHistory.length)
       .fill(null)
@@ -109,6 +128,13 @@ function App() {
     return isAsc ? res : res.reverse();
   };
 
+  /**
+   * Render status text depending on internal state
+   * @dev If the winner has been decided => return status text with the winner
+   *      If the stepNumber reach maximum => Draw
+   *      Otherwise return whose turn is next
+   * @returns {JSX.Element}
+   */
   const statusText = (): JSX.Element => {
     if (winner) return <p className={`status ${winner}`}>Winner: {winner}</p>;
     if (stepNumber === WIDTH * WIDTH) return <p className="status">DRAW!</p>;
@@ -154,7 +180,6 @@ function App() {
           />
         </div>
 
-        {statusText()}
         <button onClick={() => setSortAsc((prev) => !prev)}>Sort: {isSortAsc ? 'DESC' : 'ASC'}</button>
         <button onClick={() => resetBoard()}>Reset</button>
         <ol>
@@ -171,6 +196,7 @@ function App() {
       </div>
 
       <div className="game-board">
+        {statusText()}
         <Board boardState={boardHistory[stepNumber]} width={WIDTH} height={WIDTH} onSquareClicked={handleClick} winningMoves={winningMoves} />
       </div>
     </div>
@@ -180,6 +206,7 @@ function App() {
 export default App;
 
 /**
+ * TODO:\
  * [X] Display the location for each move in the format (col, row) in the move history list.
  * [X] Bold the currently selected item in the move list.
  * [X] Rewrite Board to use two loops to make the squares instead of hardcoding them. Rewrite winning rule to 5 consecutive squares.

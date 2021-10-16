@@ -50,6 +50,7 @@ ul {
 .move-history.active {
   color: white;
   background: var(--square-color);
+  font-weight: bold;
 }
 
 ol {
